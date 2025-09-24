@@ -51,7 +51,7 @@ const routes: Array<RouteRecordRaw> = [
                     breadcrumbs: ["Website", "Setting"],
                 },
             },
-
+    
             // MASTER
             {
                 path: "/dashboard/master/users/roles",
@@ -73,8 +73,22 @@ const routes: Array<RouteRecordRaw> = [
                     breadcrumbs: ["Master", "Users"],
                 },
             },
+    
+            // SEKOlah
+            {
+                path: "/dashboard/sekolah/siswa",
+                name: "dashboard.sekolah.siswa",
+                component: () =>
+                    import("@/pages/dashboard/sekolah/siswa/Index.vue"),
+                meta: {
+                    pageTitle: "Siswa",
+                    breadcrumbs: ["Sekolah", "Siswa"],
+                },
+            },
         ],
     },
+    
+
     {
         path: "/",
         component: () => import("@/layouts/AuthLayout.vue"),

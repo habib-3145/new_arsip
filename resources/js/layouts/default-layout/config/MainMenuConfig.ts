@@ -44,6 +44,26 @@ const MainMenuConfig: Array<MenuItem> = [
                     },
                 ],
             },
+
+            {
+                sectionTitle: "Sekolah",
+                route: "/dashboard/sekolah",
+                keenthemesIcon: "element-11",
+                name: "sekolah",
+                sub: [
+                    {
+                        heading: "Siswa",
+                        name: "sekolah-siswa",
+                        route: "/dashboard/sekolah/siswa",
+                    },
+                    // {
+                    //     heading: "User",
+                    //     name: "master-user",
+                    //     route: "/dashboard/master/users",
+                    // },
+                ],
+            },
+        
             {
                 heading: "Setting",
                 route: "/dashboard/setting",
