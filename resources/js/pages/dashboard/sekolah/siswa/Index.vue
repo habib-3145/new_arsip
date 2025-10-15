@@ -3,63 +3,56 @@ import { h, ref, watch } from "vue";
 import { useDelete } from "@/libs/hooks";
 import Form from "./Form.vue";
 import { createColumnHelper } from "@tanstack/vue-table";
-import type { User } from "@/types";
+import type { Siswa } from "@/types";
 
-const column = createColumnHelper<User>();
+const column = createColumnHelper<Siswa>();
 const paginateRef = ref<any>(null);
-const selected = ref<string>("");
+const selected = ref<number>(0);
 const openForm = ref<boolean>(false);
 
-const { delete: deleteUser } = useDelete({
+const { delete: deleteSiswa } = useDelete({
     onSuccess: () => paginateRef.value.refetch(),
 });
 
 const columns = [
-    column.accessor("no", {
-        header: "#",
-    }),
-    column.accessor("name", {
-        header: "Nama",
-    }),
-    column.accessor("email", {
-        header: "Email",
-    }),
-    column.accessor("phone", {
-        header: "No. Telp",
-    }),
-    column.accessor("uuid", {
-        header: "Aksi",
-        cell: (cell) =>
-            h("div", { class: "d-flex gap-2" }, [
-                h(
-                    "button",
-                    {
-                        class: "btn btn-sm btn-icon btn-info",
-                        onClick: () => {
-                            selected.value = cell.getValue();
-                            openForm.value = true;
-                        },
-                    },
-                    h("i", { class: "la la-pencil fs-2" })
-                ),
-                h(
-                    "button",
-                    {
-                        class: "btn btn-sm btn-icon btn-danger",
-                        onClick: () =>
-                            deleteUser(`/master/users/${cell.getValue()}`),
-                    },
-                    h("i", { class: "la la-trash fs-2" })
-                ),
-            ]),
-    }),
+  column.accessor("id", { header: "No" }),
+  column.accessor("name", { header: "Nama" }),
+  column.accessor("kelas", { header: "Kelas" }),
+  column.accessor("nis", { header: "NIS" }),
+  column.accessor("id", {
+    header: "Aksi",
+    cell: (cell) =>
+      h("div", { class: "d-flex gap-2" }, [
+        h(
+          "button",
+          {
+            class: "btn btn-sm btn-icon btn-info",
+            onClick: () => {
+              selected.value = cell.getValue();
+              openForm.value = true;
+            },
+          },
+          h("i", { class: "la la-pencil fs-2" })
+        ),
+        h(
+          "button",
+          {
+            class: "btn btn-sm btn-icon btn-danger",
+            onClick: () =>
+              deleteSiswa(`/api/siswa/${cell.getValue()}`),
+          },
+          h("i", { class: "la la-trash fs-2" })
+        ),
+      ]),
+  }),
 ];
+
 
 const refresh = () => paginateRef.value.refetch();
 
 watch(openForm, (val) => {
     if (!val) {
-        selected.value = "";
+        selected.value = 0;
     }
     window.scrollTo(0, 0);
 });
@@ -75,7 +68,7 @@ watch(openForm, (val) => {
 
     <div class="card">
         <div class="card-header align-items-center">
-            <h2 class="mb-0">List Users</h2>
+            <h2 class="mb-0">List Data Siswa</h2>
             <button
                 type="button"
                 class="btn btn-sm btn-primary ms-auto"
@@ -89,8 +82,8 @@ watch(openForm, (val) => {
         <div class="card-body">
             <paginate
                 ref="paginateRef"
-                id="table-users"
-                url="/master/users"
+                id="table-siswas"
+                url="/siswas"
                 :columns="columns"
             ></paginate>
         </div>

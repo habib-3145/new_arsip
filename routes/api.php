@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SiswaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,3 +52,9 @@ Route::middleware(['auth', 'verified', 'json'])->group(function () {
         });
     });
 });
+
+
+Route::post('/siswas', [SiswaController::class, 'index']);
+Route::post('/siswa/data', [SiswaController::class, 'store']);
+Route::post('/siswa/data/{id}', [SiswaController::class, 'update']);
+Route::get('/siswa/data/{id}', [SiswaController::class, 'show']);
