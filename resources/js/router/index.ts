@@ -85,6 +85,16 @@ const routes: Array<RouteRecordRaw> = [
                     breadcrumbs: ["Sekolah", "Siswa"],
                 },
             },
+            {
+                path: "/dashboard/sekolah/kelas",
+                name: "dashboard.sekolah.kelas",
+                component: () =>
+                    import("@/pages/dashboard/sekolah/kelas/Index.vue"),
+                meta: {
+                    pageTitle: "Kelas",
+                    breadcrumbs: ["Sekolah", "Kelas"],
+                },
+            },
         ],
     },
     

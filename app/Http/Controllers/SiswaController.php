@@ -18,7 +18,7 @@ class SiswaController extends Controller
 
         DB::statement('set @no=0+' . $page * $per);
         $data = Siswa::when($request->search, function (Builder $query, string $search) {
-            $query->where('name', 'like', "%$search%")
+            $query->where('nama', 'like', "%$search%")
                 ->orWhere('email', 'like', "%$search%")
                 ->orWhere('kelas', 'like', "%$search%");
         })->latest()->paginate($per, ['*', DB::raw('@no := @no + 1 AS no')]);
@@ -26,22 +26,24 @@ class SiswaController extends Controller
         return response()->json($data);
     }
 
+    public function get(Request $request)
+{
+    return response()->json([
+        'success' => true,
+        'data' => Siswa::all(),
+    ]);
+}
+
+
     /**
      * Menampilkan data siswa berdasarkan ID siswa.
      */
-    public function show($id)
-    {
-        // Ambil siswa berdasarkan kolom id (bukan user_id)
-        $siswa = Siswa::find($id);
-
-        if (!$siswa) {
-            return response()->json([
-                'message' => 'Data siswa tidak ditemukan'
-            ], 404);
-        }
-
-        return response()->json($siswa);
-    }
+    public function show(Siswa $siswa)
+{
+    return response()->json([
+        'siswa' => $siswa
+    ]);
+}
 
     /**
      * Menyimpan data siswa baru.

@@ -1,6 +1,6 @@
 export interface Siswa {
     id: BigInteger;
-   name: string;
+   nama: string;
     nis: string;
     kelas: string;
     email: string;

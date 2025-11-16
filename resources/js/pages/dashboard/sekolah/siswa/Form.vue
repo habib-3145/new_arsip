@@ -22,20 +22,22 @@ const fileTypes = ref(["image/jpeg", "image/png", "image/jpg"]);
 const photo = ref<any>([]);
 const formRef = ref();
 
+/* ✅ VALIDASI DENGAN YUP */
 const formSchema = Yup.object().shape({
     name: Yup.string().required("Nama harus diisi"),
     email: Yup.string()
         .email("Email harus valid")
         .required("Email harus diisi"),
-    nis: Yup.string().required("Nis harus diisi"),
+    nis: Yup.string()
+        .required("NIS harus diisi")
+        .matches(/^\d+$/, "NIS hanya boleh berisi angka")
+        .length(10, "NIS harus terdiri dari tepat 10 digit"),
     kelas: Yup.string().required("Kelas harus diisi"),
-    // phone: Yup.string().required("Nomor Telepon harus diisi"),
-    // role_id: Yup.string().required("Pilih role"),
 });
 
 function getEdit() {
     block(document.getElementById("form-siswa"));
-    ApiService.get("siswa", props.selected)
+    ApiService.get("siswas", props.selected)
         .then(({ data }) => {
             siswa.value = data.siswa;
             photo.value = data.siswa.photo
@@ -52,30 +54,16 @@ function getEdit() {
 
 function submit() {
     const formData = new FormData();
-    formData.append("name", siswa.value.name);
+    formData.append("nama", siswa.value.nama);
     formData.append("email", siswa.value.email);
     formData.append("kelas", siswa.value.kelas);
     formData.append("nis", siswa.value.nis);
-
-    if (siswa.value?.password) {
-        formData.append("password", siswa.value.password);
-        formData.append(
-            "password_confirmation",
-            siswa.value.passwordConfirmation
-        );
-    }
-    if (photo.value.length) {
-        formData.append("photo", photo.value[0].file);
-    }
-    if (props.selected) {
-        formData.append("_method", "PUT");
-    }
 
     block(document.getElementById("form-siswa"));
     axios({
         method: "post",
         url: props.selected
-            ? `/siswa/data/${props.selected}`
+            ? `/siswas/${props.selected}`
             : "/siswa/data",
         data: formData,
         headers: {
@@ -89,8 +77,10 @@ function submit() {
             formRef.value.resetForm();
         })
         .catch((err: any) => {
-            formRef.value.setErrors(err.response.data.errors);
-            toast.error(err.response.data.message);
+            if (err.response?.data?.errors) {
+                formRef.value.setErrors(err.response.data.errors);
+            }
+            toast.error(err.response?.data?.message || "Terjadi kesalahan");
         })
         .finally(() => {
             unblock(document.getElementById("form-siswa"));
@@ -140,20 +130,19 @@ watch(
                 <i class="la la-times-circle p-0"></i>
             </button>
         </div>
+
         <div class="card-body">
             <div class="row">
+                <!-- NAMA -->
                 <div class="col-md-6">
-                    <!--begin::Input group-->
                     <div class="fv-row mb-7">
-                        <label class="form-label fw-bold fs-6 required">
-                            Nama
-                        </label>
+                        <label class="form-label fw-bold fs-6 required">Nama</label>
                         <Field
                             class="form-control form-control-lg form-control-solid"
                             type="text"
                             name="name"
                             autocomplete="off"
-                            v-model="siswa.name"
+                            v-model="siswa.nama"
                             placeholder="Masukkan Nama"
                         />
                         <div class="fv-plugins-message-container">
@@ -162,15 +151,12 @@ watch(
                             </div>
                         </div>
                     </div>
-                    <!--end::Input group-->
                 </div>
-                
+
+                <!-- NIS -->
                 <div class="col-md-6">
-                    <!--begin::Input group-->
                     <div class="fv-row mb-7">
-                        <label class="form-label fw-bold fs-6">
-                            NIS
-                        </label>
+                        <label class="form-label fw-bold fs-6 required">NIS</label>
                         <Field
                             class="form-control form-control-lg form-control-solid"
                             type="text"
@@ -178,6 +164,7 @@ watch(
                             autocomplete="off"
                             v-model="siswa.nis"
                             placeholder="Masukkan NIS"
+                            @input="siswa.nis = siswa.nis.replace(/[^0-9]/g, '').slice(0, 10)"
                         />
                         <div class="fv-plugins-message-container">
                             <div class="fv-help-block">
@@ -185,22 +172,19 @@ watch(
                             </div>
                         </div>
                     </div>
-                    <!--end::Input group-->
                 </div>
-                
+
+                <!-- KELAS -->
                 <div class="col-md-6">
-                    <!--begin::Input group-->
                     <div class="fv-row mb-7">
-                        <label class="form-label fw-bold fs-6">
-                            Kelas
-                        </label>
+                        <label class="form-label fw-bold fs-6 required">Kelas</label>
                         <Field
                             class="form-control form-control-lg form-control-solid"
                             type="text"
                             name="kelas"
                             autocomplete="off"
                             v-model="siswa.kelas"
-                            placeholder="Konfirmasi kelas"
+                            placeholder="Masukkan Kelas"
                         />
                         <div class="fv-plugins-message-container">
                             <div class="fv-help-block">
@@ -208,14 +192,12 @@ watch(
                             </div>
                         </div>
                     </div>
-                    <!--end::Input group-->
                 </div>
+
+                <!-- EMAIL -->
                 <div class="col-md-6">
-                    <!--begin::Input group-->
                     <div class="fv-row mb-7">
-                        <label class="form-label fw-bold fs-6 required">
-                            Email
-                        </label>
+                        <label class="form-label fw-bold fs-6 required">Email</label>
                         <Field
                             class="form-control form-control-lg form-control-solid"
                             type="text"
@@ -230,82 +212,10 @@ watch(
                             </div>
                         </div>
                     </div>
-                    <!--end::Input group-->
-                </div>
-                <div class="col-md-6">
-                    <!--begin::Input group-->
-                    <!-- <div class="fv-row mb-7">
-                        <label class="form-label fw-bold fs-6 required">
-                            Role
-                        </label>
-                        <Field
-                            name="role_id"
-                            type="hidden"
-                            v-model="siswa.role_id"
-                        >
-                            <select2
-                                placeholder="Pilih role"
-                                class="form-select-solid"
-                                :options="roles"
-                                name="role_id"
-                                v-model="siswa.role_id"
-                            >
-                            </select2>
-                        </Field>
-                        <div class="fv-plugins-message-container">
-                            <div class="fv-help-block">
-                                <ErrorMessage name="role_id" />
-                            </div>
-                        </div>
-                    </div> -->
-                    <!--end::Input group-->
-                </div>
-                <div class="col-md-6">
-                    <!--begin::Input group-->
-                    <!-- <div class="fv-row mb-7">
-                        <label class="form-label fw-bold fs-6 required">
-                            Nomor Telepon
-                        </label>
-                        <Field
-                            class="form-control form-control-lg form-control-solid"
-                            type="text"
-                            name="phone"
-                            autocomplete="off"
-                            v-model="siswa.phone"
-                            placeholder="089"
-                        />
-                        <div class="fv-plugins-message-container">
-                            <div class="fv-help-block">
-                                <ErrorMessage name="phone" />
-                            </div>
-                        </div>
-                    </div> -->
-                    <!--end::Input group-->
-                </div>
-                <div class="col-md-6">
-                    <!--begin::Input group-->
-                    <!-- <div class="fv-row mb-7">
-                        <label class="form-label fw-bold fs-6">
-                            Foto Siswa
-                        </label> -->
-                        <!--begin::Input-->
-                        <!-- <file-upload
-                            :files="photo"
-                            :accepted-file-types="fileTypes"
-                            required
-                            v-on:updatefiles="(file) => (photo = file)"
-                        ></file-upload> -->
-                        <!--end::Input-->
-                        <!-- <div class="fv-plugins-message-container">
-                            <div class="fv-help-block">
-                                <ErrorMessage name="photo" />
-                            </div>
-                        </div>
-                    </div> -->
-                    <!--end::Input group-->
                 </div>
             </div>
         </div>
+
         <div class="card-footer d-flex">
             <button type="submit" class="btn btn-primary btn-sm ms-auto">
                 Simpan

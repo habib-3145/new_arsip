@@ -16,7 +16,7 @@ const { delete: deleteSiswa } = useDelete({
 
 const columns = [
   column.accessor("id", { header: "No" }),
-  column.accessor("name", { header: "Nama" }),
+  column.accessor("nama", { header: "Nama" }),
   column.accessor("kelas", { header: "Kelas" }),
   column.accessor("nis", { header: "NIS" }),
   column.accessor("id", {
@@ -26,7 +26,7 @@ const columns = [
         h(
           "button",
           {
-            class: "btn btn-sm btn-icon btn-info",
+            class: "btn btn-sm btn-icon btn-light-info",
             onClick: () => {
               selected.value = cell.getValue();
               openForm.value = true;
@@ -37,9 +37,9 @@ const columns = [
         h(
           "button",
           {
-            class: "btn btn-sm btn-icon btn-danger",
+            class: "btn btn-sm btn-icon btn-light-danger",
             onClick: () =>
-              deleteSiswa(`/api/siswa/${cell.getValue()}`),
+              deleteSiswa(`/siswa/${cell.getValue()}`),
           },
           h("i", { class: "la la-trash fs-2" })
         ),

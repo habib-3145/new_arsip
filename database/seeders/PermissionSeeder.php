@@ -21,6 +21,7 @@ class PermissionSeeder extends Seeder
 
         $menuMaster = ['master', 'master-user', 'master-role'];
         $menuSekolah = ['sekolah', 'sekolah-siswa'];
+        $menuSekolah = ['master', 'master-kabinet', 'master-dokumen'];
         $menuWebsite = ['website', 'setting'];
         
         

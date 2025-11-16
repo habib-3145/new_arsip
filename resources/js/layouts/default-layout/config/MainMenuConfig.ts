@@ -42,7 +42,19 @@ const MainMenuConfig: Array<MenuItem> = [
                             },
                         ],
                     },
-                ],
+                    {
+                        sectionTitle: "Kabinet",
+                        route: "/kabinet",
+                        name: "master-kabinet",
+                        sub: [
+                            {
+                                heading: "Dokumen",
+                                name: "master-dokumen",
+                                route: "/dashboard/master/dokumen",
+                            },
+                        ],
+                    },
+                ], 
             },
 
             {
@@ -56,11 +68,11 @@ const MainMenuConfig: Array<MenuItem> = [
                         name: "sekolah-siswa",
                         route: "/dashboard/sekolah/siswa",
                     },
-                    // {
-                    //     heading: "User",
-                    //     name: "master-user",
-                    //     route: "/dashboard/master/users",
-                    // },
+                    {
+                        heading: "Kelas",
+                        name: "sekolah-siswa",
+                        route: "/dashboard/sekolah/kelas",
+                    },
                 ],
             },
         
