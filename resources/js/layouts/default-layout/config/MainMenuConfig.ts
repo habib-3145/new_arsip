@@ -43,12 +43,22 @@ const MainMenuConfig: Array<MenuItem> = [
                         ],
                     },
                     {
-                        sectionTitle: "Kabinet",
-                        route: "/kabinet",
+                        sectionTitle: "Dokumen",
+                        route: "/dokumen",
                         name: "master-kabinet",
                         sub: [
                             {
-                                heading: "Dokumen",
+                                heading: "Kartu Keluarga",
+                                name: "master-dokumen",
+                                route: "/dashboard/master/dokumen",
+                            },
+                            {
+                                heading: "Ijazah",
+                                name: "master-dokumen",
+                                route: "/dashboard/master/dokumen",
+                            },
+                            {
+                                heading: "Modul Ajar",
                                 name: "master-dokumen",
                                 route: "/dashboard/master/dokumen",
                             },
@@ -60,7 +70,7 @@ const MainMenuConfig: Array<MenuItem> = [
             {
                 sectionTitle: "Sekolah",
                 route: "/dashboard/sekolah",
-                keenthemesIcon: "element-11",
+                keenthemesIcon: "element-11",  
                 name: "sekolah",
                 sub: [
                     {
