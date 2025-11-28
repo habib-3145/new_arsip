@@ -11,13 +11,14 @@ const selected = ref<number>(0);
 const openForm = ref<boolean>(false);
 
 const { delete: deleteSiswa } = useDelete({
-    onSuccess: () => paginateRef.value.refetch(),
+  onSuccess: () => paginateRef.value.refetch(),
 });
 
 const columns = [
-  column.accessor("id", { header: "No" }),
+  column.accessor("id", { header: "#" }),
   column.accessor("nama", { header: "Nama" }),
   column.accessor("kelas", { header: "Kelas" }),
+  column.accessor("jurusan", { header: "jurusan" }),
   column.accessor("nis", { header: "NIS" }),
   column.accessor("id", {
     header: "Aksi",
@@ -51,41 +52,26 @@ const columns = [
 const refresh = () => paginateRef.value.refetch();
 
 watch(openForm, (val) => {
-    if (!val) {
-        selected.value = 0;
-    }
-    window.scrollTo(0, 0);
+  if (!val) {
+    selected.value = 0;
+  }
+  window.scrollTo(0, 0);
 });
 </script>
 
 <template>
-    <Form
-        :selected="selected"
-        @close="openForm = false"
-        v-if="openForm"
-        @refresh="refresh"
-    />
+  <Form :selected="selected" @close="openForm = false" v-if="openForm" @refresh="refresh" />
 
-    <div class="card">
-        <div class="card-header align-items-center">
-            <h2 class="mb-0">List Data Siswa</h2>
-            <button
-                type="button"
-                class="btn btn-sm btn-primary ms-auto"
-                v-if="!openForm"
-                @click="openForm = true"
-            >
-                Tambah
-                <i class="la la-plus"></i>
-            </button>
-        </div>
-        <div class="card-body">
-            <paginate
-                ref="paginateRef"
-                id="table-siswas"
-                url="/siswas"
-                :columns="columns"
-            ></paginate>
-        </div>
+  <div class="card">
+    <div class="card-header align-items-center">
+      <h2 class="mb-0">List Data Siswa</h2>
+      <button type="button" class="btn btn-sm btn-primary ms-auto" v-if="!openForm" @click="openForm = true">
+        Tambah
+        <i class="la la-plus"></i>
+      </button>
     </div>
+    <div class="card-body">
+      <paginate ref="paginateRef" id="table-siswas" url="/siswas" :columns="columns"></paginate>
+    </div>
+  </div>
 </template>

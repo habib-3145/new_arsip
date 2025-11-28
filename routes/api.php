@@ -6,6 +6,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\KartuKeluargaController;
+use App\Http\Controllers\IjazahController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,8 +53,25 @@ Route::middleware(['auth', 'verified', 'json'])->group(function () {
             Route::apiResource('roles', RoleController::class)
                 ->except(['index', 'store']);
         });
+
+        Route::middleware('can:master-dokumen')->group(function () {
+            Route::get('dokumen/kartu-keluarga', [KartuKeluargaController::class, 'get']);
+            Route::post('dokumen/kartu-keluarga', [KartuKeluargaController::class, 'index']);
+            Route::post('dokumen/kartu-keluarga/store', [KartuKeluargaController::class, 'store']);
+    
+            Route::apiResource('dokumen/kartu-keluarga', KartuKeluargaController::class)
+                ->except(['index', 'store']);
+
+            Route::get('dokumen/ijazah', [IjazahController::class, 'get']);
+            Route::post('dokumen/ijazah', [IjazahController::class, 'index']);
+            Route::post('dokumen/ijazah/store', [IjazahController::class, 'store']);
+            Route::apiResource('dokumen/ijazah', IjazahController::class)
+                ->except(['index', 'store']);    
+        });
     });
 });
+
+
 
 
 
@@ -63,7 +82,7 @@ Route::middleware(['auth', 'verified', 'json'])->group(function () {
         Route::apiResource('siswas', SiswaController::class)
         ->except(['index', 'store']);
         Route::get('siswas', [SiswaController::class, 'get']);
-        // Route::get('/siswa/data/{id}', [SiswaController::class, 'show']);
+        Route::get('/siswa/data/{id}', [SiswaController::class, 'show']);
         Route::delete('/siswa/{id}', [SiswaController::class, 'destroy']);
 
 

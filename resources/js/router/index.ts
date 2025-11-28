@@ -73,6 +73,26 @@ const routes: Array<RouteRecordRaw> = [
                     breadcrumbs: ["Master", "Users"],
                 },
             },
+            {
+                path: "/dashboard/master/dokumen/kk",
+                name: "dashboard.master.dokumen.kk",
+                component: () =>
+                    import("@/pages/dashboard/master/dokumen/kk/Index.vue"),
+                meta: {
+                    pageTitle: "Kartu Keluarga",
+                    breadcrumbs: ["Master", "KK"],
+                },
+            },
+            {
+                path: "/dashboard/master/dokumen/ijazah",
+                name: "dashboard.master.dokumen.ijazah",
+                component: () =>
+                    import("@/pages/dashboard/master/dokumen/ijazah/Index.vue"),
+                meta: {
+                    pageTitle: "Ijazah",
+                    breadcrumbs: ["Master", "Ijazah"],
+                },
+            },
     
             // SEKOlah
             {

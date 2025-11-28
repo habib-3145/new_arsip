@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class SiswaController extends Controller
 {
@@ -20,30 +21,30 @@ class SiswaController extends Controller
         $data = Siswa::when($request->search, function (Builder $query, string $search) {
             $query->where('nama', 'like', "%$search%")
                 ->orWhere('email', 'like', "%$search%")
-                ->orWhere('kelas', 'like', "%$search%");
+                ->orWhere('kelas', 'like', "%$search%")
+                ->orWhere('jurusan', 'like', "%$search%"); // <── search jurusan
         })->latest()->paginate($per, ['*', DB::raw('@no := @no + 1 AS no')]);
 
         return response()->json($data);
     }
 
     public function get(Request $request)
-{
-    return response()->json([
-        'success' => true,
-        'data' => Siswa::all(),
-    ]);
-}
-
+    {
+        return response()->json([
+            'success' => true,
+            'data' => Siswa::all(),
+        ]);
+    }
 
     /**
-     * Menampilkan data siswa berdasarkan ID siswa.
+     * Menampilkan data berdasarkan ID.
      */
     public function show(Siswa $siswa)
-{
-    return response()->json([
-        'siswa' => $siswa
-    ]);
-}
+    {
+        return response()->json([
+            'siswa' => $siswa
+        ]);
+    }
 
     /**
      * Menyimpan data siswa baru.
@@ -54,7 +55,9 @@ class SiswaController extends Controller
             'nis'     => 'required|string|unique:siswas,nis',
             'nama'    => 'required|string|max:255',
             'kelas'   => 'required|string|max:100',
+            'jurusan' => 'required|string|max:100',     // <── validasi jurusan
             'email'   => 'required|email|unique:siswas,email',
+            'user_id' => 'nullable|exists:users,id'
         ]);
 
         $siswa = Siswa::create($validated);
@@ -73,10 +76,12 @@ class SiswaController extends Controller
         $siswa = Siswa::findOrFail($id);
 
         $validated = $request->validate([
-            'nis' => 'required|string|unique:siswas,nis,' . $siswa->id,
-            'nama' => 'required|string|max:255',
-            'kelas' => 'required|string|max:100',
-            'email' => 'required|email|unique:siswas,email,' . $siswa->id,
+            'nis'     => 'required|string|unique:siswas,nis,' . $siswa->id,
+            'nama'    => 'required|string|max:255',
+            'kelas'   => 'required|string|max:100',
+            'jurusan' => 'required|string|max:100',  // <── field baru
+            'email'   => 'required|email|unique:siswas,email,' . $siswa->id,
+            'user_id' => 'nullable|exists:users,id'
         ]);
 
         $siswa->update($validated);

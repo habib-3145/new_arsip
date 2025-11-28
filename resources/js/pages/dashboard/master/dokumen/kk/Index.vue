@@ -3,26 +3,44 @@ import { h, ref, watch } from "vue";
 import { useDelete } from "@/libs/hooks";
 import Form from "./Form.vue";
 import { createColumnHelper } from "@tanstack/vue-table";
-import type { Class } from "@/types";
+import type { User } from "@/types";
 
-const column = createColumnHelper<Class>();
+const column = createColumnHelper<User>();
 const paginateRef = ref<any>(null);
 const selected = ref<string>("");
 const openForm = ref<boolean>(false);
 
-const { delete: deleteClass } = useDelete({
+const { delete: deleteUser } = useDelete({
     onSuccess: () => paginateRef.value.refetch(),
 });
 
 const columns = [
     column.accessor("no", {
-        header: "No",
+        header: "no",
     }),
-    column.accessor("kelas", {
-        header: "Kelas/Jurusan",
+    column.accessor("name", {
+        header: "Nama",
     }),
-    column.accessor("wali_kelas", {
-        header: "Wali Kelas",
+    column.accessor("no_kk", {
+        header: "No-Kk",
+    }),
+    column.accessor("alamat", {
+        header: "Alamat",
+    }),
+    column.accessor("rt", {
+        header: "Rt",
+    }),
+    column.accessor("rw", {
+        header: "Rw",
+    }),
+    column.accessor("desa_kelurahan", {
+        header: "Desa/Kelurahan",
+    }),
+    column.accessor("kabupaten_kota", {
+        header: "kabupaten/Kota",
+    }),
+    column.accessor("provinsi", {
+        header: "Provinsi",
     }),
     column.accessor("id", {
         header: "Aksi",
@@ -44,7 +62,7 @@ const columns = [
                     {
                         class: "btn btn-sm btn-icon btn-danger",
                         onClick: () =>
-                            deleteClass(`/classes/${cell.getValue()}`),
+                            deleteUser(`/master/dokumen/kartu-keluarga/${cell.getValue()}`),
                     },
                     h("i", { class: "la la-trash fs-2" })
                 ),
@@ -72,7 +90,7 @@ watch(openForm, (val) => {
 
     <div class="card">
         <div class="card-header align-items-center">
-            <h2 class="mb-0">List kelas</h2>
+            <h2 class="mb-0">List Kartu Keluarga</h2>
             <button
                 type="button"
                 class="btn btn-sm btn-primary ms-auto"
@@ -86,8 +104,8 @@ watch(openForm, (val) => {
         <div class="card-body">
             <paginate
                 ref="paginateRef"
-                id="table-classes"
-                url="/classes"
+                id="table-kartu_keluargas"
+                url="/master/dokumen/kartu-keluarga"
                 :columns="columns"
             ></paginate>
         </div>

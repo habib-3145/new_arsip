@@ -6,7 +6,6 @@ import axios from "@/libs/axios";
 import { toast } from "vue3-toastify";
 import type { Siswa } from "@/types";
 import ApiService from "@/core/services/ApiService";
-import { useRole } from "@/services/useRole";
 
 const props = defineProps({
     selected: {
@@ -33,6 +32,7 @@ const formSchema = Yup.object().shape({
         .matches(/^\d+$/, "NIS hanya boleh berisi angka")
         .length(10, "NIS harus terdiri dari tepat 10 digit"),
     kelas: Yup.string().required("Kelas harus diisi"),
+    jurusan: Yup.string().required("Jurusan harus diisi"),
 });
 
 function getEdit() {
@@ -57,6 +57,7 @@ function submit() {
     formData.append("nama", siswa.value.nama);
     formData.append("email", siswa.value.email);
     formData.append("kelas", siswa.value.kelas);
+    formData.append("jurusan", siswa.value.jurusan);
     formData.append("nis", siswa.value.nis);
 
     block(document.getElementById("form-siswa"));
@@ -87,13 +88,13 @@ function submit() {
         });
 }
 
-const role = useRole();
-const roles = computed(() =>
-    role.data.value?.map((item: Siswa) => ({
-        id: item.id,
-        text: item.full_name,
-    }))
-);
+// const role = useRole();
+// const roles = computed(() =>
+//     role.data.value?.map((item: Siswa) => ({
+//         id: item.id,
+//         text: item.full_name,
+//     }))
+// );
 
 onMounted(async () => {
     if (props.selected) {
@@ -189,6 +190,26 @@ watch(
                         <div class="fv-plugins-message-container">
                             <div class="fv-help-block">
                                 <ErrorMessage name="kelas" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KELAS -->
+                <div class="col-md-6">
+                    <div class="fv-row mb-7">
+                        <label class="form-label fw-bold fs-6 required">Jurusan</label>
+                        <Field
+                            class="form-control form-control-lg form-control-solid"
+                            type="text"
+                            name="jurusan"
+                            autocomplete="off"
+                            v-model="siswa.jurusan"
+                            placeholder="Masukkan jurusan"
+                        />
+                        <div class="fv-plugins-message-container">
+                            <div class="fv-help-block">
+                                <ErrorMessage name="jurusan" />
                             </div>
                         </div>
                     </div>

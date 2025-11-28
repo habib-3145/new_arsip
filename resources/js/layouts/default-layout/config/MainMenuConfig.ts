@@ -50,12 +50,12 @@ const MainMenuConfig: Array<MenuItem> = [
                             {
                                 heading: "Kartu Keluarga",
                                 name: "master-dokumen",
-                                route: "/dashboard/master/dokumen",
+                                route: "/dashboard/master/dokumen/kk",
                             },
                             {
                                 heading: "Ijazah",
                                 name: "master-dokumen",
-                                route: "/dashboard/master/dokumen",
+                                route: "/dashboard/master/dokumen/ijazah",
                             },
                             {
                                 heading: "Modul Ajar",

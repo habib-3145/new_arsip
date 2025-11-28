@@ -3,6 +3,7 @@ export interface Siswa {
    nama: string;
     nis: string;
     kelas: string;
+    jurusan: string;
     email: string;
     user_id: BigInteger;
 }

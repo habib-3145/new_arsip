@@ -27,6 +27,19 @@ const columns = [
     column.accessor("phone", {
         header: "No. Telp",
     }),
+    column.accessor("photo", {
+    header: "Foto",
+    cell: (cell) => {
+        const path = cell.getValue();
+        return h("img", {
+            src: `/storage/${path}`,
+            style: "width: 50px; height: 50px; object-fit: cover; border-radius: 6px;",
+            alt: "Raimu",
+        });
+    },
+}),
+
+
     column.accessor("uuid", {
         header: "Aksi",
         cell: (cell) =>
